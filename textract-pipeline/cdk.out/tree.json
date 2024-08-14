@@ -1,0 +1,3130 @@
+{
+  "version": "tree-0.1",
+  "tree": {
+    "id": "App",
+    "path": "",
+    "children": {
+      "TextractPipelineStack": {
+        "id": "TextractPipelineStack",
+        "path": "TextractPipelineStack",
+        "children": {
+          "JobCompletion": {
+            "id": "JobCompletion",
+            "path": "TextractPipelineStack/JobCompletion",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "TextractPipelineStack/JobCompletion/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::SNS::Topic",
+                  "aws:cdk:cloudformation:props": {}
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_sns.CfnTopic",
+                  "version": "2.151.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_sns.Topic",
+              "version": "2.151.0"
+            }
+          },
+          "TextractServiceRole": {
+            "id": "TextractServiceRole",
+            "path": "TextractPipelineStack/TextractServiceRole",
+            "children": {
+              "ImportTextractServiceRole": {
+                "id": "ImportTextractServiceRole",
+                "path": "TextractPipelineStack/TextractServiceRole/ImportTextractServiceRole",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.Resource",
+                  "version": "2.151.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "TextractPipelineStack/TextractServiceRole/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                  "aws:cdk:cloudformation:props": {
+                    "assumeRolePolicyDocument": {
+                      "Statement": [
+                        {
+                          "Action": "sts:AssumeRole",
+                          "Effect": "Allow",
+                          "Principal": {
+                            "Service": "textract.amazonaws.com"
+                          }
+                        }
+                      ],
+                      "Version": "2012-10-17"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                  "version": "2.151.0"
+                }
+              },
+              "DefaultPolicy": {
+                "id": "DefaultPolicy",
+                "path": "TextractPipelineStack/TextractServiceRole/DefaultPolicy",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "TextractPipelineStack/TextractServiceRole/DefaultPolicy/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                      "aws:cdk:cloudformation:props": {
+                        "policyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sns:Publish",
+                              "Effect": "Allow",
+                              "Resource": {
+                                "Ref": "JobCompletionF65D4017"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "policyName": "TextractServiceRoleDefaultPolicy636FAA3E",
+                        "roles": [
+                          {
+                            "Ref": "TextractServiceRole720C3B18"
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                      "version": "2.151.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Policy",
+                  "version": "2.151.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_iam.Role",
+              "version": "2.151.0"
+            }
+          },
+          "S3BatchOperationsRole": {
+            "id": "S3BatchOperationsRole",
+            "path": "TextractPipelineStack/S3BatchOperationsRole",
+            "children": {
+              "ImportS3BatchOperationsRole": {
+                "id": "ImportS3BatchOperationsRole",
+                "path": "TextractPipelineStack/S3BatchOperationsRole/ImportS3BatchOperationsRole",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.Resource",
+                  "version": "2.151.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "TextractPipelineStack/S3BatchOperationsRole/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                  "aws:cdk:cloudformation:props": {
+                    "assumeRolePolicyDocument": {
+                      "Statement": [
+                        {
+                          "Action": "sts:AssumeRole",
+                          "Effect": "Allow",
+                          "Principal": {
+                            "Service": "batchoperations.s3.amazonaws.com"
+                          }
+                        }
+                      ],
+                      "Version": "2012-10-17"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                  "version": "2.151.0"
+                }
+              },
+              "DefaultPolicy": {
+                "id": "DefaultPolicy",
+                "path": "TextractPipelineStack/S3BatchOperationsRole/DefaultPolicy",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "TextractPipelineStack/S3BatchOperationsRole/DefaultPolicy/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                      "aws:cdk:cloudformation:props": {
+                        "policyDocument": {
+                          "Statement": [
+                            {
+                              "Action": [
+                                "s3:GetObject*",
+                                "s3:GetBucket*",
+                                "s3:List*",
+                                "s3:DeleteObject*",
+                                "s3:PutObject",
+                                "s3:PutObjectLegalHold",
+                                "s3:PutObjectRetention",
+                                "s3:PutObjectTagging",
+                                "s3:PutObjectVersionTagging",
+                                "s3:Abort*"
+                              ],
+                              "Effect": "Allow",
+                              "Resource": [
+                                {
+                                  "Fn::GetAtt": [
+                                    "ExistingDocumentsBucket90147676",
+                                    "Arn"
+                                  ]
+                                },
+                                {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      {
+                                        "Fn::GetAtt": [
+                                          "ExistingDocumentsBucket90147676",
+                                          "Arn"
+                                        ]
+                                      },
+                                      "/*"
+                                    ]
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "Action": [
+                                "s3:GetObject*",
+                                "s3:GetBucket*",
+                                "s3:List*",
+                                "s3:DeleteObject*",
+                                "s3:PutObject",
+                                "s3:PutObjectLegalHold",
+                                "s3:PutObjectRetention",
+                                "s3:PutObjectTagging",
+                                "s3:PutObjectVersionTagging",
+                                "s3:Abort*"
+                              ],
+                              "Effect": "Allow",
+                              "Resource": [
+                                {
+                                  "Fn::GetAtt": [
+                                    "InventoryAndLogsBucketB5DF1E2C",
+                                    "Arn"
+                                  ]
+                                },
+                                {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      {
+                                        "Fn::GetAtt": [
+                                          "InventoryAndLogsBucketB5DF1E2C",
+                                          "Arn"
+                                        ]
+                                      },
+                                      "/*"
+                                    ]
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "Action": "lambda:InvokeFunction",
+                              "Effect": "Allow",
+                              "Resource": [
+                                {
+                                  "Fn::GetAtt": [
+                                    "S3BatchProcessor6C619AEA",
+                                    "Arn"
+                                  ]
+                                },
+                                {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      {
+                                        "Fn::GetAtt": [
+                                          "S3BatchProcessor6C619AEA",
+                                          "Arn"
+                                        ]
+                                      },
+                                      ":*"
+                                    ]
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "Action": "lambda:*",
+                              "Effect": "Allow",
+                              "Resource": "*"
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "policyName": "S3BatchOperationsRoleDefaultPolicy55D2AE09",
+                        "roles": [
+                          {
+                            "Ref": "S3BatchOperationsRole79F42304"
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                      "version": "2.151.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Policy",
+                  "version": "2.151.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_iam.Role",
+              "version": "2.151.0"
+            }
+          },
+          "DocumentsBucket": {
+            "id": "DocumentsBucket",
+            "path": "TextractPipelineStack/DocumentsBucket",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "TextractPipelineStack/DocumentsBucket/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::S3::Bucket",
+                  "aws:cdk:cloudformation:props": {}
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3.CfnBucket",
+                  "version": "2.151.0"
+                }
+              },
+              "Notifications": {
+                "id": "Notifications",
+                "path": "TextractPipelineStack/DocumentsBucket/Notifications",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "TextractPipelineStack/DocumentsBucket/Notifications/Resource",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.CfnResource",
+                      "version": "2.151.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0"
+                }
+              },
+              "AllowBucketNotificationsToTextractPipelineStackS3Processor64034F9F": {
+                "id": "AllowBucketNotificationsToTextractPipelineStackS3Processor64034F9F",
+                "path": "TextractPipelineStack/DocumentsBucket/AllowBucketNotificationsToTextractPipelineStackS3Processor64034F9F",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                  "aws:cdk:cloudformation:props": {
+                    "action": "lambda:InvokeFunction",
+                    "functionName": {
+                      "Fn::GetAtt": [
+                        "S3ProcessorF0626C49",
+                        "Arn"
+                      ]
+                    },
+                    "principal": "s3.amazonaws.com",
+                    "sourceAccount": {
+                      "Ref": "AWS::AccountId"
+                    },
+                    "sourceArn": {
+                      "Fn::GetAtt": [
+                        "DocumentsBucket9EC9DEB9",
+                        "Arn"
+                      ]
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                  "version": "2.151.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_s3.Bucket",
+              "version": "2.151.0"
+            }
+          },
+          "ExistingDocumentsBucket": {
+            "id": "ExistingDocumentsBucket",
+            "path": "TextractPipelineStack/ExistingDocumentsBucket",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "TextractPipelineStack/ExistingDocumentsBucket/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::S3::Bucket",
+                  "aws:cdk:cloudformation:props": {}
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3.CfnBucket",
+                  "version": "2.151.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_s3.Bucket",
+              "version": "2.151.0"
+            }
+          },
+          "InventoryAndLogsBucket": {
+            "id": "InventoryAndLogsBucket",
+            "path": "TextractPipelineStack/InventoryAndLogsBucket",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "TextractPipelineStack/InventoryAndLogsBucket/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::S3::Bucket",
+                  "aws:cdk:cloudformation:props": {}
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3.CfnBucket",
+                  "version": "2.151.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_s3.Bucket",
+              "version": "2.151.0"
+            }
+          },
+          "OutputTable": {
+            "id": "OutputTable",
+            "path": "TextractPipelineStack/OutputTable",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "TextractPipelineStack/OutputTable/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::DynamoDB::Table",
+                  "aws:cdk:cloudformation:props": {
+                    "attributeDefinitions": [
+                      {
+                        "attributeName": "documentId",
+                        "attributeType": "S"
+                      },
+                      {
+                        "attributeName": "outputType",
+                        "attributeType": "S"
+                      }
+                    ],
+                    "keySchema": [
+                      {
+                        "attributeName": "documentId",
+                        "keyType": "HASH"
+                      },
+                      {
+                        "attributeName": "outputType",
+                        "keyType": "RANGE"
+                      }
+                    ],
+                    "provisionedThroughput": {
+                      "readCapacityUnits": 5,
+                      "writeCapacityUnits": 5
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_dynamodb.CfnTable",
+                  "version": "2.151.0"
+                }
+              },
+              "ScalingRole": {
+                "id": "ScalingRole",
+                "path": "TextractPipelineStack/OutputTable/ScalingRole",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.Resource",
+                  "version": "2.151.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_dynamodb.Table",
+              "version": "2.151.0"
+            }
+          },
+          "DocumentsTable": {
+            "id": "DocumentsTable",
+            "path": "TextractPipelineStack/DocumentsTable",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "TextractPipelineStack/DocumentsTable/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::DynamoDB::Table",
+                  "aws:cdk:cloudformation:props": {
+                    "attributeDefinitions": [
+                      {
+                        "attributeName": "documentId",
+                        "attributeType": "S"
+                      }
+                    ],
+                    "keySchema": [
+                      {
+                        "attributeName": "documentId",
+                        "keyType": "HASH"
+                      }
+                    ],
+                    "provisionedThroughput": {
+                      "readCapacityUnits": 5,
+                      "writeCapacityUnits": 5
+                    },
+                    "streamSpecification": {
+                      "streamViewType": "NEW_IMAGE"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_dynamodb.CfnTable",
+                  "version": "2.151.0"
+                }
+              },
+              "ScalingRole": {
+                "id": "ScalingRole",
+                "path": "TextractPipelineStack/DocumentsTable/ScalingRole",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.Resource",
+                  "version": "2.151.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_dynamodb.Table",
+              "version": "2.151.0"
+            }
+          },
+          "DLQ": {
+            "id": "DLQ",
+            "path": "TextractPipelineStack/DLQ",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "TextractPipelineStack/DLQ/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::SQS::Queue",
+                  "aws:cdk:cloudformation:props": {
+                    "messageRetentionPeriod": 1209600,
+                    "visibilityTimeout": 30
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_sqs.CfnQueue",
+                  "version": "2.151.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_sqs.Queue",
+              "version": "2.151.0"
+            }
+          },
+          "SyncJobs": {
+            "id": "SyncJobs",
+            "path": "TextractPipelineStack/SyncJobs",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "TextractPipelineStack/SyncJobs/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::SQS::Queue",
+                  "aws:cdk:cloudformation:props": {
+                    "messageRetentionPeriod": 1209600,
+                    "redrivePolicy": {
+                      "deadLetterTargetArn": {
+                        "Fn::GetAtt": [
+                          "DLQ581697C4",
+                          "Arn"
+                        ]
+                      },
+                      "maxReceiveCount": 50
+                    },
+                    "visibilityTimeout": 30
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_sqs.CfnQueue",
+                  "version": "2.151.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_sqs.Queue",
+              "version": "2.151.0"
+            }
+          },
+          "AsyncJobs": {
+            "id": "AsyncJobs",
+            "path": "TextractPipelineStack/AsyncJobs",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "TextractPipelineStack/AsyncJobs/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::SQS::Queue",
+                  "aws:cdk:cloudformation:props": {
+                    "messageRetentionPeriod": 1209600,
+                    "redrivePolicy": {
+                      "deadLetterTargetArn": {
+                        "Fn::GetAtt": [
+                          "DLQ581697C4",
+                          "Arn"
+                        ]
+                      },
+                      "maxReceiveCount": 50
+                    },
+                    "visibilityTimeout": 30
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_sqs.CfnQueue",
+                  "version": "2.151.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_sqs.Queue",
+              "version": "2.151.0"
+            }
+          },
+          "JobResults": {
+            "id": "JobResults",
+            "path": "TextractPipelineStack/JobResults",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "TextractPipelineStack/JobResults/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::SQS::Queue",
+                  "aws:cdk:cloudformation:props": {
+                    "messageRetentionPeriod": 1209600,
+                    "redrivePolicy": {
+                      "deadLetterTargetArn": {
+                        "Fn::GetAtt": [
+                          "DLQ581697C4",
+                          "Arn"
+                        ]
+                      },
+                      "maxReceiveCount": 50
+                    },
+                    "visibilityTimeout": 900
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_sqs.CfnQueue",
+                  "version": "2.151.0"
+                }
+              },
+              "Policy": {
+                "id": "Policy",
+                "path": "TextractPipelineStack/JobResults/Policy",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "TextractPipelineStack/JobResults/Policy/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::SQS::QueuePolicy",
+                      "aws:cdk:cloudformation:props": {
+                        "policyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sqs:SendMessage",
+                              "Condition": {
+                                "ArnEquals": {
+                                  "aws:SourceArn": {
+                                    "Ref": "JobCompletionF65D4017"
+                                  }
+                                }
+                              },
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "sns.amazonaws.com"
+                              },
+                              "Resource": {
+                                "Fn::GetAtt": [
+                                  "JobResults39F5168E",
+                                  "Arn"
+                                ]
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "queues": [
+                          {
+                            "Ref": "JobResults39F5168E"
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_sqs.CfnQueuePolicy",
+                      "version": "2.151.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_sqs.QueuePolicy",
+                  "version": "2.151.0"
+                }
+              },
+              "TextractPipelineStackJobCompletion9BDE34E4": {
+                "id": "TextractPipelineStackJobCompletion9BDE34E4",
+                "path": "TextractPipelineStack/JobResults/TextractPipelineStackJobCompletion9BDE34E4",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "TextractPipelineStack/JobResults/TextractPipelineStackJobCompletion9BDE34E4/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::SNS::Subscription",
+                      "aws:cdk:cloudformation:props": {
+                        "endpoint": {
+                          "Fn::GetAtt": [
+                            "JobResults39F5168E",
+                            "Arn"
+                          ]
+                        },
+                        "protocol": "sqs",
+                        "topicArn": {
+                          "Ref": "JobCompletionF65D4017"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_sns.CfnSubscription",
+                      "version": "2.151.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_sns.Subscription",
+                  "version": "2.151.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_sqs.Queue",
+              "version": "2.151.0"
+            }
+          },
+          "HelperLayer": {
+            "id": "HelperLayer",
+            "path": "TextractPipelineStack/HelperLayer",
+            "children": {
+              "Code": {
+                "id": "Code",
+                "path": "TextractPipelineStack/HelperLayer/Code",
+                "children": {
+                  "Stage": {
+                    "id": "Stage",
+                    "path": "TextractPipelineStack/HelperLayer/Code/Stage",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.AssetStaging",
+                      "version": "2.151.0"
+                    }
+                  },
+                  "AssetBucket": {
+                    "id": "AssetBucket",
+                    "path": "TextractPipelineStack/HelperLayer/Code/AssetBucket",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3.BucketBase",
+                      "version": "2.151.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
+                  "version": "2.151.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "TextractPipelineStack/HelperLayer/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::LayerVersion",
+                  "aws:cdk:cloudformation:props": {
+                    "compatibleRuntimes": [
+                      "python3.9"
+                    ],
+                    "content": {
+                      "s3Bucket": {
+                        "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+                      },
+                      "s3Key": "3465a29ad67b28442269ed580b516b09bff82c9260886d7454a40c9ae45f909a.zip"
+                    },
+                    "description": "Helper layer.",
+                    "licenseInfo": "Apache-2.0"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnLayerVersion",
+                  "version": "2.151.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_lambda.LayerVersion",
+              "version": "2.151.0"
+            }
+          },
+          "Textractor": {
+            "id": "Textractor",
+            "path": "TextractPipelineStack/Textractor",
+            "children": {
+              "Code": {
+                "id": "Code",
+                "path": "TextractPipelineStack/Textractor/Code",
+                "children": {
+                  "Stage": {
+                    "id": "Stage",
+                    "path": "TextractPipelineStack/Textractor/Code/Stage",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.AssetStaging",
+                      "version": "2.151.0"
+                    }
+                  },
+                  "AssetBucket": {
+                    "id": "AssetBucket",
+                    "path": "TextractPipelineStack/Textractor/Code/AssetBucket",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3.BucketBase",
+                      "version": "2.151.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
+                  "version": "2.151.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "TextractPipelineStack/Textractor/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::LayerVersion",
+                  "aws:cdk:cloudformation:props": {
+                    "compatibleRuntimes": [
+                      "python3.9"
+                    ],
+                    "content": {
+                      "s3Bucket": {
+                        "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+                      },
+                      "s3Key": "8b9f4f32c03a29d55eee67fbc475fe253aae123ab090539e4554a1b4f9d9f34b.zip"
+                    },
+                    "description": "Textractor layer.",
+                    "licenseInfo": "Apache-2.0"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnLayerVersion",
+                  "version": "2.151.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_lambda.LayerVersion",
+              "version": "2.151.0"
+            }
+          },
+          "S3Processor": {
+            "id": "S3Processor",
+            "path": "TextractPipelineStack/S3Processor",
+            "children": {
+              "ServiceRole": {
+                "id": "ServiceRole",
+                "path": "TextractPipelineStack/S3Processor/ServiceRole",
+                "children": {
+                  "ImportServiceRole": {
+                    "id": "ImportServiceRole",
+                    "path": "TextractPipelineStack/S3Processor/ServiceRole/ImportServiceRole",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.151.0"
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "TextractPipelineStack/S3Processor/ServiceRole/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "lambda.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "managedPolicyArns": [
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                      "version": "2.151.0"
+                    }
+                  },
+                  "DefaultPolicy": {
+                    "id": "DefaultPolicy",
+                    "path": "TextractPipelineStack/S3Processor/ServiceRole/DefaultPolicy",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "TextractPipelineStack/S3Processor/ServiceRole/DefaultPolicy/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                          "aws:cdk:cloudformation:props": {
+                            "policyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": [
+                                    "dynamodb:BatchGetItem",
+                                    "dynamodb:GetRecords",
+                                    "dynamodb:GetShardIterator",
+                                    "dynamodb:Query",
+                                    "dynamodb:GetItem",
+                                    "dynamodb:Scan",
+                                    "dynamodb:ConditionCheckItem",
+                                    "dynamodb:BatchWriteItem",
+                                    "dynamodb:PutItem",
+                                    "dynamodb:UpdateItem",
+                                    "dynamodb:DeleteItem",
+                                    "dynamodb:DescribeTable"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": [
+                                    {
+                                      "Fn::GetAtt": [
+                                        "DocumentsTable7E808EE5",
+                                        "Arn"
+                                      ]
+                                    },
+                                    {
+                                      "Ref": "AWS::NoValue"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "Action": [
+                                    "sqs:SendMessage",
+                                    "sqs:GetQueueAttributes",
+                                    "sqs:GetQueueUrl"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::GetAtt": [
+                                      "SyncJobs0FE0C444",
+                                      "Arn"
+                                    ]
+                                  }
+                                },
+                                {
+                                  "Action": [
+                                    "sqs:SendMessage",
+                                    "sqs:GetQueueAttributes",
+                                    "sqs:GetQueueUrl"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::GetAtt": [
+                                      "AsyncJobsE9347181",
+                                      "Arn"
+                                    ]
+                                  }
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            },
+                            "policyName": "S3ProcessorServiceRoleDefaultPolicyDB165203",
+                            "roles": [
+                              {
+                                "Ref": "S3ProcessorServiceRoleB05FBD69"
+                              }
+                            ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                          "version": "2.151.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.Policy",
+                      "version": "2.151.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Role",
+                  "version": "2.151.0"
+                }
+              },
+              "Code": {
+                "id": "Code",
+                "path": "TextractPipelineStack/S3Processor/Code",
+                "children": {
+                  "Stage": {
+                    "id": "Stage",
+                    "path": "TextractPipelineStack/S3Processor/Code/Stage",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.AssetStaging",
+                      "version": "2.151.0"
+                    }
+                  },
+                  "AssetBucket": {
+                    "id": "AssetBucket",
+                    "path": "TextractPipelineStack/S3Processor/Code/AssetBucket",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3.BucketBase",
+                      "version": "2.151.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
+                  "version": "2.151.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "TextractPipelineStack/S3Processor/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
+                  "aws:cdk:cloudformation:props": {
+                    "code": {
+                      "s3Bucket": {
+                        "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+                      },
+                      "s3Key": "be783e560f2bf1f29609af4316489adaaa9da5d0e5999efc15ba24095d64506f.zip"
+                    },
+                    "environment": {
+                      "variables": {
+                        "SYNC_QUEUE_URL": {
+                          "Ref": "SyncJobs0FE0C444"
+                        },
+                        "ASYNC_QUEUE_URL": {
+                          "Ref": "AsyncJobsE9347181"
+                        },
+                        "DOCUMENTS_TABLE": {
+                          "Ref": "DocumentsTable7E808EE5"
+                        },
+                        "OUTPUT_TABLE": {
+                          "Ref": "OutputTable875D8E18"
+                        }
+                      }
+                    },
+                    "handler": "lambda_function.lambda_handler",
+                    "layers": [
+                      {
+                        "Ref": "HelperLayer49ADCD6B"
+                      }
+                    ],
+                    "role": {
+                      "Fn::GetAtt": [
+                        "S3ProcessorServiceRoleB05FBD69",
+                        "Arn"
+                      ]
+                    },
+                    "runtime": "python3.9",
+                    "timeout": 30
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnFunction",
+                  "version": "2.151.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_lambda.Function",
+              "version": "2.151.0"
+            }
+          },
+          "BucketNotificationsHandler050a0587b7544547bf325f094a3db834": {
+            "id": "BucketNotificationsHandler050a0587b7544547bf325f094a3db834",
+            "path": "TextractPipelineStack/BucketNotificationsHandler050a0587b7544547bf325f094a3db834",
+            "children": {
+              "Role": {
+                "id": "Role",
+                "path": "TextractPipelineStack/BucketNotificationsHandler050a0587b7544547bf325f094a3db834/Role",
+                "children": {
+                  "ImportRole": {
+                    "id": "ImportRole",
+                    "path": "TextractPipelineStack/BucketNotificationsHandler050a0587b7544547bf325f094a3db834/Role/ImportRole",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.151.0"
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "TextractPipelineStack/BucketNotificationsHandler050a0587b7544547bf325f094a3db834/Role/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "lambda.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "managedPolicyArns": [
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                      "version": "2.151.0"
+                    }
+                  },
+                  "DefaultPolicy": {
+                    "id": "DefaultPolicy",
+                    "path": "TextractPipelineStack/BucketNotificationsHandler050a0587b7544547bf325f094a3db834/Role/DefaultPolicy",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "TextractPipelineStack/BucketNotificationsHandler050a0587b7544547bf325f094a3db834/Role/DefaultPolicy/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                          "aws:cdk:cloudformation:props": {
+                            "policyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": "s3:PutBucketNotification",
+                                  "Effect": "Allow",
+                                  "Resource": "*"
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            },
+                            "policyName": "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleDefaultPolicy2CF63D36",
+                            "roles": [
+                              {
+                                "Ref": "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleB6FB88EC"
+                              }
+                            ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                          "version": "2.151.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.Policy",
+                      "version": "2.151.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Role",
+                  "version": "2.151.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "TextractPipelineStack/BucketNotificationsHandler050a0587b7544547bf325f094a3db834/Resource",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnResource",
+                  "version": "2.151.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.3.0"
+            }
+          },
+          "S3BatchProcessor": {
+            "id": "S3BatchProcessor",
+            "path": "TextractPipelineStack/S3BatchProcessor",
+            "children": {
+              "ServiceRole": {
+                "id": "ServiceRole",
+                "path": "TextractPipelineStack/S3BatchProcessor/ServiceRole",
+                "children": {
+                  "ImportServiceRole": {
+                    "id": "ImportServiceRole",
+                    "path": "TextractPipelineStack/S3BatchProcessor/ServiceRole/ImportServiceRole",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.151.0"
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "TextractPipelineStack/S3BatchProcessor/ServiceRole/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "lambda.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "managedPolicyArns": [
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                      "version": "2.151.0"
+                    }
+                  },
+                  "DefaultPolicy": {
+                    "id": "DefaultPolicy",
+                    "path": "TextractPipelineStack/S3BatchProcessor/ServiceRole/DefaultPolicy",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "TextractPipelineStack/S3BatchProcessor/ServiceRole/DefaultPolicy/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                          "aws:cdk:cloudformation:props": {
+                            "policyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": [
+                                    "dynamodb:BatchGetItem",
+                                    "dynamodb:GetRecords",
+                                    "dynamodb:GetShardIterator",
+                                    "dynamodb:Query",
+                                    "dynamodb:GetItem",
+                                    "dynamodb:Scan",
+                                    "dynamodb:ConditionCheckItem",
+                                    "dynamodb:BatchWriteItem",
+                                    "dynamodb:PutItem",
+                                    "dynamodb:UpdateItem",
+                                    "dynamodb:DeleteItem",
+                                    "dynamodb:DescribeTable"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": [
+                                    {
+                                      "Fn::GetAtt": [
+                                        "DocumentsTable7E808EE5",
+                                        "Arn"
+                                      ]
+                                    },
+                                    {
+                                      "Ref": "AWS::NoValue"
+                                    }
+                                  ]
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            },
+                            "policyName": "S3BatchProcessorServiceRoleDefaultPolicyB97F9E74",
+                            "roles": [
+                              {
+                                "Ref": "S3BatchProcessorServiceRoleD6C72F8A"
+                              }
+                            ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                          "version": "2.151.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.Policy",
+                      "version": "2.151.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Role",
+                  "version": "2.151.0"
+                }
+              },
+              "Code": {
+                "id": "Code",
+                "path": "TextractPipelineStack/S3BatchProcessor/Code",
+                "children": {
+                  "Stage": {
+                    "id": "Stage",
+                    "path": "TextractPipelineStack/S3BatchProcessor/Code/Stage",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.AssetStaging",
+                      "version": "2.151.0"
+                    }
+                  },
+                  "AssetBucket": {
+                    "id": "AssetBucket",
+                    "path": "TextractPipelineStack/S3BatchProcessor/Code/AssetBucket",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3.BucketBase",
+                      "version": "2.151.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
+                  "version": "2.151.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "TextractPipelineStack/S3BatchProcessor/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
+                  "aws:cdk:cloudformation:props": {
+                    "code": {
+                      "s3Bucket": {
+                        "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+                      },
+                      "s3Key": "517d3f42472451ba38143ed131cfd2f9a4a2cf47efe2353a1160e73a527367ac.zip"
+                    },
+                    "environment": {
+                      "variables": {
+                        "DOCUMENTS_TABLE": {
+                          "Ref": "DocumentsTable7E808EE5"
+                        },
+                        "OUTPUT_TABLE": {
+                          "Ref": "OutputTable875D8E18"
+                        }
+                      }
+                    },
+                    "handler": "lambda_function.lambda_handler",
+                    "layers": [
+                      {
+                        "Ref": "HelperLayer49ADCD6B"
+                      }
+                    ],
+                    "role": {
+                      "Fn::GetAtt": [
+                        "S3BatchProcessorServiceRoleD6C72F8A",
+                        "Arn"
+                      ]
+                    },
+                    "runtime": "python3.9",
+                    "timeout": 30
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnFunction",
+                  "version": "2.151.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_lambda.Function",
+              "version": "2.151.0"
+            }
+          },
+          "TaskProcessor": {
+            "id": "TaskProcessor",
+            "path": "TextractPipelineStack/TaskProcessor",
+            "children": {
+              "ServiceRole": {
+                "id": "ServiceRole",
+                "path": "TextractPipelineStack/TaskProcessor/ServiceRole",
+                "children": {
+                  "ImportServiceRole": {
+                    "id": "ImportServiceRole",
+                    "path": "TextractPipelineStack/TaskProcessor/ServiceRole/ImportServiceRole",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.151.0"
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "TextractPipelineStack/TaskProcessor/ServiceRole/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "lambda.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "managedPolicyArns": [
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                      "version": "2.151.0"
+                    }
+                  },
+                  "DefaultPolicy": {
+                    "id": "DefaultPolicy",
+                    "path": "TextractPipelineStack/TaskProcessor/ServiceRole/DefaultPolicy",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "TextractPipelineStack/TaskProcessor/ServiceRole/DefaultPolicy/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                          "aws:cdk:cloudformation:props": {
+                            "policyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": "dynamodb:ListStreams",
+                                  "Effect": "Allow",
+                                  "Resource": "*"
+                                },
+                                {
+                                  "Action": [
+                                    "dynamodb:DescribeStream",
+                                    "dynamodb:GetRecords",
+                                    "dynamodb:GetShardIterator"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::GetAtt": [
+                                      "DocumentsTable7E808EE5",
+                                      "StreamArn"
+                                    ]
+                                  }
+                                },
+                                {
+                                  "Action": [
+                                    "dynamodb:BatchGetItem",
+                                    "dynamodb:GetRecords",
+                                    "dynamodb:GetShardIterator",
+                                    "dynamodb:Query",
+                                    "dynamodb:GetItem",
+                                    "dynamodb:Scan",
+                                    "dynamodb:ConditionCheckItem",
+                                    "dynamodb:BatchWriteItem",
+                                    "dynamodb:PutItem",
+                                    "dynamodb:UpdateItem",
+                                    "dynamodb:DeleteItem",
+                                    "dynamodb:DescribeTable"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": [
+                                    {
+                                      "Fn::GetAtt": [
+                                        "DocumentsTable7E808EE5",
+                                        "Arn"
+                                      ]
+                                    },
+                                    {
+                                      "Ref": "AWS::NoValue"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "Action": [
+                                    "sqs:SendMessage",
+                                    "sqs:GetQueueAttributes",
+                                    "sqs:GetQueueUrl"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::GetAtt": [
+                                      "SyncJobs0FE0C444",
+                                      "Arn"
+                                    ]
+                                  }
+                                },
+                                {
+                                  "Action": [
+                                    "sqs:SendMessage",
+                                    "sqs:GetQueueAttributes",
+                                    "sqs:GetQueueUrl"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::GetAtt": [
+                                      "AsyncJobsE9347181",
+                                      "Arn"
+                                    ]
+                                  }
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            },
+                            "policyName": "TaskProcessorServiceRoleDefaultPolicy877E187E",
+                            "roles": [
+                              {
+                                "Ref": "TaskProcessorServiceRoleB5CA2A12"
+                              }
+                            ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                          "version": "2.151.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.Policy",
+                      "version": "2.151.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Role",
+                  "version": "2.151.0"
+                }
+              },
+              "Code": {
+                "id": "Code",
+                "path": "TextractPipelineStack/TaskProcessor/Code",
+                "children": {
+                  "Stage": {
+                    "id": "Stage",
+                    "path": "TextractPipelineStack/TaskProcessor/Code/Stage",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.AssetStaging",
+                      "version": "2.151.0"
+                    }
+                  },
+                  "AssetBucket": {
+                    "id": "AssetBucket",
+                    "path": "TextractPipelineStack/TaskProcessor/Code/AssetBucket",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3.BucketBase",
+                      "version": "2.151.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
+                  "version": "2.151.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "TextractPipelineStack/TaskProcessor/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
+                  "aws:cdk:cloudformation:props": {
+                    "code": {
+                      "s3Bucket": {
+                        "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+                      },
+                      "s3Key": "d6423fa4876f8b1a62cfc07e5a42e2c21c52d6fbf01372a2a76469365f9ce4e2.zip"
+                    },
+                    "environment": {
+                      "variables": {
+                        "SYNC_QUEUE_URL": {
+                          "Ref": "SyncJobs0FE0C444"
+                        },
+                        "ASYNC_QUEUE_URL": {
+                          "Ref": "AsyncJobsE9347181"
+                        }
+                      }
+                    },
+                    "handler": "lambda_function.lambda_handler",
+                    "layers": [
+                      {
+                        "Ref": "HelperLayer49ADCD6B"
+                      }
+                    ],
+                    "role": {
+                      "Fn::GetAtt": [
+                        "TaskProcessorServiceRoleB5CA2A12",
+                        "Arn"
+                      ]
+                    },
+                    "runtime": "python3.9",
+                    "timeout": 900
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnFunction",
+                  "version": "2.151.0"
+                }
+              },
+              "DynamoDBEventSource:TextractPipelineStackDocumentsTable2054137D": {
+                "id": "DynamoDBEventSource:TextractPipelineStackDocumentsTable2054137D",
+                "path": "TextractPipelineStack/TaskProcessor/DynamoDBEventSource:TextractPipelineStackDocumentsTable2054137D",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "TextractPipelineStack/TaskProcessor/DynamoDBEventSource:TextractPipelineStackDocumentsTable2054137D/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::Lambda::EventSourceMapping",
+                      "aws:cdk:cloudformation:props": {
+                        "batchSize": 100,
+                        "eventSourceArn": {
+                          "Fn::GetAtt": [
+                            "DocumentsTable7E808EE5",
+                            "StreamArn"
+                          ]
+                        },
+                        "functionName": {
+                          "Ref": "TaskProcessor26BEA722"
+                        },
+                        "startingPosition": "TRIM_HORIZON"
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_lambda.CfnEventSourceMapping",
+                      "version": "2.151.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.EventSourceMapping",
+                  "version": "2.151.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_lambda.Function",
+              "version": "2.151.0"
+            }
+          },
+          "SyncProcessor": {
+            "id": "SyncProcessor",
+            "path": "TextractPipelineStack/SyncProcessor",
+            "children": {
+              "ServiceRole": {
+                "id": "ServiceRole",
+                "path": "TextractPipelineStack/SyncProcessor/ServiceRole",
+                "children": {
+                  "ImportServiceRole": {
+                    "id": "ImportServiceRole",
+                    "path": "TextractPipelineStack/SyncProcessor/ServiceRole/ImportServiceRole",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.151.0"
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "TextractPipelineStack/SyncProcessor/ServiceRole/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "lambda.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "managedPolicyArns": [
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                      "version": "2.151.0"
+                    }
+                  },
+                  "DefaultPolicy": {
+                    "id": "DefaultPolicy",
+                    "path": "TextractPipelineStack/SyncProcessor/ServiceRole/DefaultPolicy",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "TextractPipelineStack/SyncProcessor/ServiceRole/DefaultPolicy/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                          "aws:cdk:cloudformation:props": {
+                            "policyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": [
+                                    "sqs:ReceiveMessage",
+                                    "sqs:ChangeMessageVisibility",
+                                    "sqs:GetQueueUrl",
+                                    "sqs:DeleteMessage",
+                                    "sqs:GetQueueAttributes"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::GetAtt": [
+                                      "SyncJobs0FE0C444",
+                                      "Arn"
+                                    ]
+                                  }
+                                },
+                                {
+                                  "Action": [
+                                    "s3:GetObject*",
+                                    "s3:GetBucket*",
+                                    "s3:List*",
+                                    "s3:DeleteObject*",
+                                    "s3:PutObject",
+                                    "s3:PutObjectLegalHold",
+                                    "s3:PutObjectRetention",
+                                    "s3:PutObjectTagging",
+                                    "s3:PutObjectVersionTagging",
+                                    "s3:Abort*"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": [
+                                    {
+                                      "Fn::GetAtt": [
+                                        "DocumentsBucket9EC9DEB9",
+                                        "Arn"
+                                      ]
+                                    },
+                                    {
+                                      "Fn::Join": [
+                                        "",
+                                        [
+                                          {
+                                            "Fn::GetAtt": [
+                                              "DocumentsBucket9EC9DEB9",
+                                              "Arn"
+                                            ]
+                                          },
+                                          "/*"
+                                        ]
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "Action": [
+                                    "s3:GetObject*",
+                                    "s3:GetBucket*",
+                                    "s3:List*",
+                                    "s3:DeleteObject*",
+                                    "s3:PutObject",
+                                    "s3:PutObjectLegalHold",
+                                    "s3:PutObjectRetention",
+                                    "s3:PutObjectTagging",
+                                    "s3:PutObjectVersionTagging",
+                                    "s3:Abort*"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": [
+                                    {
+                                      "Fn::GetAtt": [
+                                        "ExistingDocumentsBucket90147676",
+                                        "Arn"
+                                      ]
+                                    },
+                                    {
+                                      "Fn::Join": [
+                                        "",
+                                        [
+                                          {
+                                            "Fn::GetAtt": [
+                                              "ExistingDocumentsBucket90147676",
+                                              "Arn"
+                                            ]
+                                          },
+                                          "/*"
+                                        ]
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "Action": [
+                                    "dynamodb:BatchGetItem",
+                                    "dynamodb:GetRecords",
+                                    "dynamodb:GetShardIterator",
+                                    "dynamodb:Query",
+                                    "dynamodb:GetItem",
+                                    "dynamodb:Scan",
+                                    "dynamodb:ConditionCheckItem",
+                                    "dynamodb:BatchWriteItem",
+                                    "dynamodb:PutItem",
+                                    "dynamodb:UpdateItem",
+                                    "dynamodb:DeleteItem",
+                                    "dynamodb:DescribeTable"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": [
+                                    {
+                                      "Fn::GetAtt": [
+                                        "OutputTable875D8E18",
+                                        "Arn"
+                                      ]
+                                    },
+                                    {
+                                      "Ref": "AWS::NoValue"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "Action": [
+                                    "dynamodb:BatchGetItem",
+                                    "dynamodb:GetRecords",
+                                    "dynamodb:GetShardIterator",
+                                    "dynamodb:Query",
+                                    "dynamodb:GetItem",
+                                    "dynamodb:Scan",
+                                    "dynamodb:ConditionCheckItem",
+                                    "dynamodb:BatchWriteItem",
+                                    "dynamodb:PutItem",
+                                    "dynamodb:UpdateItem",
+                                    "dynamodb:DeleteItem",
+                                    "dynamodb:DescribeTable"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": [
+                                    {
+                                      "Fn::GetAtt": [
+                                        "DocumentsTable7E808EE5",
+                                        "Arn"
+                                      ]
+                                    },
+                                    {
+                                      "Ref": "AWS::NoValue"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "Action": "textract:*",
+                                  "Effect": "Allow",
+                                  "Resource": "*"
+                                },
+                                {
+                                  "Action": "lambda:InvokeFunction",
+                                  "Effect": "Allow",
+                                  "Resource": [
+                                    {
+                                      "Fn::GetAtt": [
+                                        "PdfGeneratorF0286D75",
+                                        "Arn"
+                                      ]
+                                    },
+                                    {
+                                      "Fn::Join": [
+                                        "",
+                                        [
+                                          {
+                                            "Fn::GetAtt": [
+                                              "PdfGeneratorF0286D75",
+                                              "Arn"
+                                            ]
+                                          },
+                                          ":*"
+                                        ]
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            },
+                            "policyName": "SyncProcessorServiceRoleDefaultPolicy47FE5EFC",
+                            "roles": [
+                              {
+                                "Ref": "SyncProcessorServiceRoleA3A4164E"
+                              }
+                            ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                          "version": "2.151.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.Policy",
+                      "version": "2.151.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Role",
+                  "version": "2.151.0"
+                }
+              },
+              "Code": {
+                "id": "Code",
+                "path": "TextractPipelineStack/SyncProcessor/Code",
+                "children": {
+                  "Stage": {
+                    "id": "Stage",
+                    "path": "TextractPipelineStack/SyncProcessor/Code/Stage",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.AssetStaging",
+                      "version": "2.151.0"
+                    }
+                  },
+                  "AssetBucket": {
+                    "id": "AssetBucket",
+                    "path": "TextractPipelineStack/SyncProcessor/Code/AssetBucket",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3.BucketBase",
+                      "version": "2.151.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
+                  "version": "2.151.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "TextractPipelineStack/SyncProcessor/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
+                  "aws:cdk:cloudformation:props": {
+                    "code": {
+                      "s3Bucket": {
+                        "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+                      },
+                      "s3Key": "8086952285c24f7603d1dcc1852ca5886365595bd88cb474efe2bebbe4fc3d5f.zip"
+                    },
+                    "environment": {
+                      "variables": {
+                        "OUTPUT_TABLE": {
+                          "Ref": "OutputTable875D8E18"
+                        },
+                        "DOCUMENTS_TABLE": {
+                          "Ref": "DocumentsTable7E808EE5"
+                        },
+                        "AWS_DATA_PATH": "models"
+                      }
+                    },
+                    "handler": "lambda_function.lambda_handler",
+                    "layers": [
+                      {
+                        "Ref": "HelperLayer49ADCD6B"
+                      },
+                      {
+                        "Ref": "TextractorAF6C0D19"
+                      }
+                    ],
+                    "role": {
+                      "Fn::GetAtt": [
+                        "SyncProcessorServiceRoleA3A4164E",
+                        "Arn"
+                      ]
+                    },
+                    "runtime": "python3.9",
+                    "timeout": 25
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnFunction",
+                  "version": "2.151.0"
+                }
+              },
+              "SqsEventSource:TextractPipelineStackSyncJobsF8FC7C33": {
+                "id": "SqsEventSource:TextractPipelineStackSyncJobsF8FC7C33",
+                "path": "TextractPipelineStack/SyncProcessor/SqsEventSource:TextractPipelineStackSyncJobsF8FC7C33",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "TextractPipelineStack/SyncProcessor/SqsEventSource:TextractPipelineStackSyncJobsF8FC7C33/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::Lambda::EventSourceMapping",
+                      "aws:cdk:cloudformation:props": {
+                        "batchSize": 1,
+                        "eventSourceArn": {
+                          "Fn::GetAtt": [
+                            "SyncJobs0FE0C444",
+                            "Arn"
+                          ]
+                        },
+                        "functionName": {
+                          "Ref": "SyncProcessorA0819FA5"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_lambda.CfnEventSourceMapping",
+                      "version": "2.151.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.EventSourceMapping",
+                  "version": "2.151.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_lambda.Function",
+              "version": "2.151.0"
+            }
+          },
+          "ASyncProcessor": {
+            "id": "ASyncProcessor",
+            "path": "TextractPipelineStack/ASyncProcessor",
+            "children": {
+              "ServiceRole": {
+                "id": "ServiceRole",
+                "path": "TextractPipelineStack/ASyncProcessor/ServiceRole",
+                "children": {
+                  "ImportServiceRole": {
+                    "id": "ImportServiceRole",
+                    "path": "TextractPipelineStack/ASyncProcessor/ServiceRole/ImportServiceRole",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.151.0"
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "TextractPipelineStack/ASyncProcessor/ServiceRole/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "lambda.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "managedPolicyArns": [
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                      "version": "2.151.0"
+                    }
+                  },
+                  "DefaultPolicy": {
+                    "id": "DefaultPolicy",
+                    "path": "TextractPipelineStack/ASyncProcessor/ServiceRole/DefaultPolicy",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "TextractPipelineStack/ASyncProcessor/ServiceRole/DefaultPolicy/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                          "aws:cdk:cloudformation:props": {
+                            "policyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": [
+                                    "s3:GetObject*",
+                                    "s3:GetBucket*",
+                                    "s3:List*"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": [
+                                    {
+                                      "Fn::GetAtt": [
+                                        "DocumentsBucket9EC9DEB9",
+                                        "Arn"
+                                      ]
+                                    },
+                                    {
+                                      "Fn::Join": [
+                                        "",
+                                        [
+                                          {
+                                            "Fn::GetAtt": [
+                                              "DocumentsBucket9EC9DEB9",
+                                              "Arn"
+                                            ]
+                                          },
+                                          "/*"
+                                        ]
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "Action": [
+                                    "s3:GetObject*",
+                                    "s3:GetBucket*",
+                                    "s3:List*",
+                                    "s3:DeleteObject*",
+                                    "s3:PutObject",
+                                    "s3:PutObjectLegalHold",
+                                    "s3:PutObjectRetention",
+                                    "s3:PutObjectTagging",
+                                    "s3:PutObjectVersionTagging",
+                                    "s3:Abort*"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": [
+                                    {
+                                      "Fn::GetAtt": [
+                                        "ExistingDocumentsBucket90147676",
+                                        "Arn"
+                                      ]
+                                    },
+                                    {
+                                      "Fn::Join": [
+                                        "",
+                                        [
+                                          {
+                                            "Fn::GetAtt": [
+                                              "ExistingDocumentsBucket90147676",
+                                              "Arn"
+                                            ]
+                                          },
+                                          "/*"
+                                        ]
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "Action": [
+                                    "sqs:ReceiveMessage",
+                                    "sqs:ChangeMessageVisibility",
+                                    "sqs:GetQueueUrl",
+                                    "sqs:DeleteMessage",
+                                    "sqs:GetQueueAttributes"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::GetAtt": [
+                                      "AsyncJobsE9347181",
+                                      "Arn"
+                                    ]
+                                  }
+                                },
+                                {
+                                  "Action": "iam:PassRole",
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::GetAtt": [
+                                      "TextractServiceRole720C3B18",
+                                      "Arn"
+                                    ]
+                                  }
+                                },
+                                {
+                                  "Action": "textract:*",
+                                  "Effect": "Allow",
+                                  "Resource": "*"
+                                },
+                                {
+                                  "Action": "lambda:InvokeFunction",
+                                  "Effect": "Allow",
+                                  "Resource": [
+                                    {
+                                      "Fn::GetAtt": [
+                                        "PdfGeneratorF0286D75",
+                                        "Arn"
+                                      ]
+                                    },
+                                    {
+                                      "Fn::Join": [
+                                        "",
+                                        [
+                                          {
+                                            "Fn::GetAtt": [
+                                              "PdfGeneratorF0286D75",
+                                              "Arn"
+                                            ]
+                                          },
+                                          ":*"
+                                        ]
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            },
+                            "policyName": "ASyncProcessorServiceRoleDefaultPolicyC603F804",
+                            "roles": [
+                              {
+                                "Ref": "ASyncProcessorServiceRoleB60BB53C"
+                              }
+                            ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                          "version": "2.151.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.Policy",
+                      "version": "2.151.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Role",
+                  "version": "2.151.0"
+                }
+              },
+              "Code": {
+                "id": "Code",
+                "path": "TextractPipelineStack/ASyncProcessor/Code",
+                "children": {
+                  "Stage": {
+                    "id": "Stage",
+                    "path": "TextractPipelineStack/ASyncProcessor/Code/Stage",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.AssetStaging",
+                      "version": "2.151.0"
+                    }
+                  },
+                  "AssetBucket": {
+                    "id": "AssetBucket",
+                    "path": "TextractPipelineStack/ASyncProcessor/Code/AssetBucket",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3.BucketBase",
+                      "version": "2.151.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
+                  "version": "2.151.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "TextractPipelineStack/ASyncProcessor/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
+                  "aws:cdk:cloudformation:props": {
+                    "code": {
+                      "s3Bucket": {
+                        "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+                      },
+                      "s3Key": "a4a14e8693afcfcc24a6850d6f56cfff6243a13717cddb918dc0cc9d0ba5d7c7.zip"
+                    },
+                    "environment": {
+                      "variables": {
+                        "ASYNC_QUEUE_URL": {
+                          "Ref": "AsyncJobsE9347181"
+                        },
+                        "SNS_TOPIC_ARN": {
+                          "Ref": "JobCompletionF65D4017"
+                        },
+                        "SNS_ROLE_ARN": {
+                          "Fn::GetAtt": [
+                            "TextractServiceRole720C3B18",
+                            "Arn"
+                          ]
+                        },
+                        "AWS_DATA_PATH": "models"
+                      }
+                    },
+                    "handler": "lambda_function.lambda_handler",
+                    "layers": [
+                      {
+                        "Ref": "HelperLayer49ADCD6B"
+                      }
+                    ],
+                    "role": {
+                      "Fn::GetAtt": [
+                        "ASyncProcessorServiceRoleB60BB53C",
+                        "Arn"
+                      ]
+                    },
+                    "runtime": "python3.9",
+                    "timeout": 60
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnFunction",
+                  "version": "2.151.0"
+                }
+              },
+              "AllowInvoke:TextractPipelineStackJobCompletion9BDE34E4": {
+                "id": "AllowInvoke:TextractPipelineStackJobCompletion9BDE34E4",
+                "path": "TextractPipelineStack/ASyncProcessor/AllowInvoke:TextractPipelineStackJobCompletion9BDE34E4",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                  "aws:cdk:cloudformation:props": {
+                    "action": "lambda:InvokeFunction",
+                    "functionName": {
+                      "Fn::GetAtt": [
+                        "ASyncProcessorD1027704",
+                        "Arn"
+                      ]
+                    },
+                    "principal": "sns.amazonaws.com",
+                    "sourceArn": {
+                      "Ref": "JobCompletionF65D4017"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                  "version": "2.151.0"
+                }
+              },
+              "JobCompletion": {
+                "id": "JobCompletion",
+                "path": "TextractPipelineStack/ASyncProcessor/JobCompletion",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "TextractPipelineStack/ASyncProcessor/JobCompletion/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::SNS::Subscription",
+                      "aws:cdk:cloudformation:props": {
+                        "endpoint": {
+                          "Fn::GetAtt": [
+                            "ASyncProcessorD1027704",
+                            "Arn"
+                          ]
+                        },
+                        "protocol": "lambda",
+                        "topicArn": {
+                          "Ref": "JobCompletionF65D4017"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_sns.CfnSubscription",
+                      "version": "2.151.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_sns.Subscription",
+                  "version": "2.151.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_lambda.Function",
+              "version": "2.151.0"
+            }
+          },
+          "Rule": {
+            "id": "Rule",
+            "path": "TextractPipelineStack/Rule",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "TextractPipelineStack/Rule/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Events::Rule",
+                  "aws:cdk:cloudformation:props": {
+                    "scheduleExpression": "rate(2 minutes)",
+                    "state": "ENABLED",
+                    "targets": [
+                      {
+                        "id": "Target0",
+                        "arn": {
+                          "Fn::GetAtt": [
+                            "ASyncProcessorD1027704",
+                            "Arn"
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_events.CfnRule",
+                  "version": "2.151.0"
+                }
+              },
+              "AllowEventRuleTextractPipelineStackASyncProcessor380CECCF": {
+                "id": "AllowEventRuleTextractPipelineStackASyncProcessor380CECCF",
+                "path": "TextractPipelineStack/Rule/AllowEventRuleTextractPipelineStackASyncProcessor380CECCF",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                  "aws:cdk:cloudformation:props": {
+                    "action": "lambda:InvokeFunction",
+                    "functionName": {
+                      "Fn::GetAtt": [
+                        "ASyncProcessorD1027704",
+                        "Arn"
+                      ]
+                    },
+                    "principal": "events.amazonaws.com",
+                    "sourceArn": {
+                      "Fn::GetAtt": [
+                        "Rule4C995B7F",
+                        "Arn"
+                      ]
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                  "version": "2.151.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_events.Rule",
+              "version": "2.151.0"
+            }
+          },
+          "JobResultProcessor": {
+            "id": "JobResultProcessor",
+            "path": "TextractPipelineStack/JobResultProcessor",
+            "children": {
+              "ServiceRole": {
+                "id": "ServiceRole",
+                "path": "TextractPipelineStack/JobResultProcessor/ServiceRole",
+                "children": {
+                  "ImportServiceRole": {
+                    "id": "ImportServiceRole",
+                    "path": "TextractPipelineStack/JobResultProcessor/ServiceRole/ImportServiceRole",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.151.0"
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "TextractPipelineStack/JobResultProcessor/ServiceRole/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "lambda.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "managedPolicyArns": [
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                      "version": "2.151.0"
+                    }
+                  },
+                  "DefaultPolicy": {
+                    "id": "DefaultPolicy",
+                    "path": "TextractPipelineStack/JobResultProcessor/ServiceRole/DefaultPolicy",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "TextractPipelineStack/JobResultProcessor/ServiceRole/DefaultPolicy/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                          "aws:cdk:cloudformation:props": {
+                            "policyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": [
+                                    "sqs:ReceiveMessage",
+                                    "sqs:ChangeMessageVisibility",
+                                    "sqs:GetQueueUrl",
+                                    "sqs:DeleteMessage",
+                                    "sqs:GetQueueAttributes"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::GetAtt": [
+                                      "JobResults39F5168E",
+                                      "Arn"
+                                    ]
+                                  }
+                                },
+                                {
+                                  "Action": [
+                                    "dynamodb:BatchGetItem",
+                                    "dynamodb:GetRecords",
+                                    "dynamodb:GetShardIterator",
+                                    "dynamodb:Query",
+                                    "dynamodb:GetItem",
+                                    "dynamodb:Scan",
+                                    "dynamodb:ConditionCheckItem",
+                                    "dynamodb:BatchWriteItem",
+                                    "dynamodb:PutItem",
+                                    "dynamodb:UpdateItem",
+                                    "dynamodb:DeleteItem",
+                                    "dynamodb:DescribeTable"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": [
+                                    {
+                                      "Fn::GetAtt": [
+                                        "OutputTable875D8E18",
+                                        "Arn"
+                                      ]
+                                    },
+                                    {
+                                      "Ref": "AWS::NoValue"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "Action": [
+                                    "dynamodb:BatchGetItem",
+                                    "dynamodb:GetRecords",
+                                    "dynamodb:GetShardIterator",
+                                    "dynamodb:Query",
+                                    "dynamodb:GetItem",
+                                    "dynamodb:Scan",
+                                    "dynamodb:ConditionCheckItem",
+                                    "dynamodb:BatchWriteItem",
+                                    "dynamodb:PutItem",
+                                    "dynamodb:UpdateItem",
+                                    "dynamodb:DeleteItem",
+                                    "dynamodb:DescribeTable"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": [
+                                    {
+                                      "Fn::GetAtt": [
+                                        "DocumentsTable7E808EE5",
+                                        "Arn"
+                                      ]
+                                    },
+                                    {
+                                      "Ref": "AWS::NoValue"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "Action": [
+                                    "s3:GetObject*",
+                                    "s3:GetBucket*",
+                                    "s3:List*",
+                                    "s3:DeleteObject*",
+                                    "s3:PutObject",
+                                    "s3:PutObjectLegalHold",
+                                    "s3:PutObjectRetention",
+                                    "s3:PutObjectTagging",
+                                    "s3:PutObjectVersionTagging",
+                                    "s3:Abort*"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": [
+                                    {
+                                      "Fn::GetAtt": [
+                                        "DocumentsBucket9EC9DEB9",
+                                        "Arn"
+                                      ]
+                                    },
+                                    {
+                                      "Fn::Join": [
+                                        "",
+                                        [
+                                          {
+                                            "Fn::GetAtt": [
+                                              "DocumentsBucket9EC9DEB9",
+                                              "Arn"
+                                            ]
+                                          },
+                                          "/*"
+                                        ]
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "Action": [
+                                    "s3:GetObject*",
+                                    "s3:GetBucket*",
+                                    "s3:List*",
+                                    "s3:DeleteObject*",
+                                    "s3:PutObject",
+                                    "s3:PutObjectLegalHold",
+                                    "s3:PutObjectRetention",
+                                    "s3:PutObjectTagging",
+                                    "s3:PutObjectVersionTagging",
+                                    "s3:Abort*"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": [
+                                    {
+                                      "Fn::GetAtt": [
+                                        "ExistingDocumentsBucket90147676",
+                                        "Arn"
+                                      ]
+                                    },
+                                    {
+                                      "Fn::Join": [
+                                        "",
+                                        [
+                                          {
+                                            "Fn::GetAtt": [
+                                              "ExistingDocumentsBucket90147676",
+                                              "Arn"
+                                            ]
+                                          },
+                                          "/*"
+                                        ]
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "Action": "textract:*",
+                                  "Effect": "Allow",
+                                  "Resource": "*"
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            },
+                            "policyName": "JobResultProcessorServiceRoleDefaultPolicyD51ACD91",
+                            "roles": [
+                              {
+                                "Ref": "JobResultProcessorServiceRole836B07ED"
+                              }
+                            ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                          "version": "2.151.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.Policy",
+                      "version": "2.151.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Role",
+                  "version": "2.151.0"
+                }
+              },
+              "Code": {
+                "id": "Code",
+                "path": "TextractPipelineStack/JobResultProcessor/Code",
+                "children": {
+                  "Stage": {
+                    "id": "Stage",
+                    "path": "TextractPipelineStack/JobResultProcessor/Code/Stage",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.AssetStaging",
+                      "version": "2.151.0"
+                    }
+                  },
+                  "AssetBucket": {
+                    "id": "AssetBucket",
+                    "path": "TextractPipelineStack/JobResultProcessor/Code/AssetBucket",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3.BucketBase",
+                      "version": "2.151.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
+                  "version": "2.151.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "TextractPipelineStack/JobResultProcessor/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
+                  "aws:cdk:cloudformation:props": {
+                    "code": {
+                      "s3Bucket": {
+                        "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+                      },
+                      "s3Key": "c804e568456d68e49a4cb2755ef2f0f26b68690e34779ff5ff5c4cc3611a41a2.zip"
+                    },
+                    "environment": {
+                      "variables": {
+                        "OUTPUT_TABLE": {
+                          "Ref": "OutputTable875D8E18"
+                        },
+                        "DOCUMENTS_TABLE": {
+                          "Ref": "DocumentsTable7E808EE5"
+                        },
+                        "AWS_DATA_PATH": "models"
+                      }
+                    },
+                    "handler": "lambda_function.lambda_handler",
+                    "layers": [
+                      {
+                        "Ref": "HelperLayer49ADCD6B"
+                      },
+                      {
+                        "Ref": "TextractorAF6C0D19"
+                      }
+                    ],
+                    "memorySize": 2000,
+                    "role": {
+                      "Fn::GetAtt": [
+                        "JobResultProcessorServiceRole836B07ED",
+                        "Arn"
+                      ]
+                    },
+                    "runtime": "python3.9",
+                    "timeout": 900
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnFunction",
+                  "version": "2.151.0"
+                }
+              },
+              "SqsEventSource:TextractPipelineStackJobResults918E7248": {
+                "id": "SqsEventSource:TextractPipelineStackJobResults918E7248",
+                "path": "TextractPipelineStack/JobResultProcessor/SqsEventSource:TextractPipelineStackJobResults918E7248",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "TextractPipelineStack/JobResultProcessor/SqsEventSource:TextractPipelineStackJobResults918E7248/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::Lambda::EventSourceMapping",
+                      "aws:cdk:cloudformation:props": {
+                        "batchSize": 1,
+                        "eventSourceArn": {
+                          "Fn::GetAtt": [
+                            "JobResults39F5168E",
+                            "Arn"
+                          ]
+                        },
+                        "functionName": {
+                          "Ref": "JobResultProcessorAD5D1803"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_lambda.CfnEventSourceMapping",
+                      "version": "2.151.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.EventSourceMapping",
+                  "version": "2.151.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_lambda.Function",
+              "version": "2.151.0"
+            }
+          },
+          "PdfGenerator": {
+            "id": "PdfGenerator",
+            "path": "TextractPipelineStack/PdfGenerator",
+            "children": {
+              "ServiceRole": {
+                "id": "ServiceRole",
+                "path": "TextractPipelineStack/PdfGenerator/ServiceRole",
+                "children": {
+                  "ImportServiceRole": {
+                    "id": "ImportServiceRole",
+                    "path": "TextractPipelineStack/PdfGenerator/ServiceRole/ImportServiceRole",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.151.0"
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "TextractPipelineStack/PdfGenerator/ServiceRole/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "lambda.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "managedPolicyArns": [
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                      "version": "2.151.0"
+                    }
+                  },
+                  "DefaultPolicy": {
+                    "id": "DefaultPolicy",
+                    "path": "TextractPipelineStack/PdfGenerator/ServiceRole/DefaultPolicy",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "TextractPipelineStack/PdfGenerator/ServiceRole/DefaultPolicy/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                          "aws:cdk:cloudformation:props": {
+                            "policyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": [
+                                    "s3:GetObject*",
+                                    "s3:GetBucket*",
+                                    "s3:List*",
+                                    "s3:DeleteObject*",
+                                    "s3:PutObject",
+                                    "s3:PutObjectLegalHold",
+                                    "s3:PutObjectRetention",
+                                    "s3:PutObjectTagging",
+                                    "s3:PutObjectVersionTagging",
+                                    "s3:Abort*"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": [
+                                    {
+                                      "Fn::GetAtt": [
+                                        "DocumentsBucket9EC9DEB9",
+                                        "Arn"
+                                      ]
+                                    },
+                                    {
+                                      "Fn::Join": [
+                                        "",
+                                        [
+                                          {
+                                            "Fn::GetAtt": [
+                                              "DocumentsBucket9EC9DEB9",
+                                              "Arn"
+                                            ]
+                                          },
+                                          "/*"
+                                        ]
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "Action": [
+                                    "s3:GetObject*",
+                                    "s3:GetBucket*",
+                                    "s3:List*",
+                                    "s3:DeleteObject*",
+                                    "s3:PutObject",
+                                    "s3:PutObjectLegalHold",
+                                    "s3:PutObjectRetention",
+                                    "s3:PutObjectTagging",
+                                    "s3:PutObjectVersionTagging",
+                                    "s3:Abort*"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": [
+                                    {
+                                      "Fn::GetAtt": [
+                                        "ExistingDocumentsBucket90147676",
+                                        "Arn"
+                                      ]
+                                    },
+                                    {
+                                      "Fn::Join": [
+                                        "",
+                                        [
+                                          {
+                                            "Fn::GetAtt": [
+                                              "ExistingDocumentsBucket90147676",
+                                              "Arn"
+                                            ]
+                                          },
+                                          "/*"
+                                        ]
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            },
+                            "policyName": "PdfGeneratorServiceRoleDefaultPolicyDEDCFA7B",
+                            "roles": [
+                              {
+                                "Ref": "PdfGeneratorServiceRole8E7DE7E7"
+                              }
+                            ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                          "version": "2.151.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.Policy",
+                      "version": "2.151.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Role",
+                  "version": "2.151.0"
+                }
+              },
+              "Code": {
+                "id": "Code",
+                "path": "TextractPipelineStack/PdfGenerator/Code",
+                "children": {
+                  "Stage": {
+                    "id": "Stage",
+                    "path": "TextractPipelineStack/PdfGenerator/Code/Stage",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.AssetStaging",
+                      "version": "2.151.0"
+                    }
+                  },
+                  "AssetBucket": {
+                    "id": "AssetBucket",
+                    "path": "TextractPipelineStack/PdfGenerator/Code/AssetBucket",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3.BucketBase",
+                      "version": "2.151.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
+                  "version": "2.151.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "TextractPipelineStack/PdfGenerator/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
+                  "aws:cdk:cloudformation:props": {
+                    "code": {
+                      "s3Bucket": {
+                        "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+                      },
+                      "s3Key": "286f99a6d3c1fd85b8fb808926508793ba80d21199743f8202590688a5c8e14c.zip"
+                    },
+                    "handler": "DemoLambdaV2::handleRequest",
+                    "memorySize": 3000,
+                    "role": {
+                      "Fn::GetAtt": [
+                        "PdfGeneratorServiceRole8E7DE7E7",
+                        "Arn"
+                      ]
+                    },
+                    "runtime": "java21",
+                    "timeout": 900
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnFunction",
+                  "version": "2.151.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_lambda.Function",
+              "version": "2.151.0"
+            }
+          },
+          "CDKMetadata": {
+            "id": "CDKMetadata",
+            "path": "TextractPipelineStack/CDKMetadata",
+            "children": {
+              "Default": {
+                "id": "Default",
+                "path": "TextractPipelineStack/CDKMetadata/Default",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnResource",
+                  "version": "2.151.0"
+                }
+              },
+              "Condition": {
+                "id": "Condition",
+                "path": "TextractPipelineStack/CDKMetadata/Condition",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnCondition",
+                  "version": "2.151.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.3.0"
+            }
+          },
+          "BootstrapVersion": {
+            "id": "BootstrapVersion",
+            "path": "TextractPipelineStack/BootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnParameter",
+              "version": "2.151.0"
+            }
+          },
+          "CheckBootstrapVersion": {
+            "id": "CheckBootstrapVersion",
+            "path": "TextractPipelineStack/CheckBootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnRule",
+              "version": "2.151.0"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "aws-cdk-lib.Stack",
+          "version": "2.151.0"
+        }
+      },
+      "Tree": {
+        "id": "Tree",
+        "path": "Tree",
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.3.0"
+        }
+      }
+    },
+    "constructInfo": {
+      "fqn": "aws-cdk-lib.App",
+      "version": "2.151.0"
+    }
+  }
+}

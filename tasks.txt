@@ -1,0 +1,30 @@
+//Something went wrong after making changes to textract-pipeline-stack. Maybe event notification issue.
+put git
+setup dynamodb
+test
+
+launch command-
+
+cdk bootstrap aws://284990659336/ap-south-1
+cdk deploy (in textract-pipeline folder)
+
+dynamodb stuff-
+Each CSV file is associated with a unique billId.
+The userId is used as the partition key to group bills for a specific user.
+The key and value from the CSV are stored as attributes within each item.
+Needs userId, and for sortkey needs billId#key (combination of billid and key)
+
+
+>connect csv to db- 
+
+>1 Create a Lambda Function
+The Lambda function will be triggered by an S3 object created event.
+The function will:
+Parse the S3 event to extract the bucket name, object key, and folder structure.
+Download the CSV file from the specified S3 path.
+Process the CSV data, converting it into DynamoDB item format.
+Batch write the items to the DynamoDB table.
+
+>2. S3 Event Configuration
+Configure an S3 event source for the Lambda function.
+Filter the events to only trigger when a new object is created in the specific folder (e.g., invoice-analysis).

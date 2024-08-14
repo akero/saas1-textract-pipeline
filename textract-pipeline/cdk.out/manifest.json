@@ -1,0 +1,377 @@
+{
+  "version": "36.0.0",
+  "artifacts": {
+    "TextractPipelineStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "TextractPipelineStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "TextractPipelineStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://unknown-account/unknown-region",
+      "properties": {
+        "templateFile": "TextractPipelineStack.template.json",
+        "terminationProtection": false,
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/03d72f856370e0615ac040a2f7949c6d8eeac52f39d6eebceae3000bd15b247d.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "TextractPipelineStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-lookup-role-${AWS::AccountId}-${AWS::Region}",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "TextractPipelineStack.assets"
+      ],
+      "metadata": {
+        "/TextractPipelineStack/JobCompletion/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "JobCompletionF65D4017"
+          }
+        ],
+        "/TextractPipelineStack/TextractServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TextractServiceRole720C3B18"
+          }
+        ],
+        "/TextractPipelineStack/TextractServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TextractServiceRoleDefaultPolicy636FAA3E"
+          }
+        ],
+        "/TextractPipelineStack/S3BatchOperationsRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "S3BatchOperationsRole79F42304"
+          }
+        ],
+        "/TextractPipelineStack/S3BatchOperationsRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "S3BatchOperationsRoleDefaultPolicy55D2AE09"
+          }
+        ],
+        "/TextractPipelineStack/DocumentsBucket/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "DocumentsBucket9EC9DEB9"
+          }
+        ],
+        "/TextractPipelineStack/DocumentsBucket/Notifications/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "DocumentsBucketNotifications871115F2"
+          }
+        ],
+        "/TextractPipelineStack/DocumentsBucket/AllowBucketNotificationsToTextractPipelineStackS3Processor64034F9F": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "DocumentsBucketAllowBucketNotificationsToTextractPipelineStackS3Processor64034F9FD5954400"
+          }
+        ],
+        "/TextractPipelineStack/ExistingDocumentsBucket/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExistingDocumentsBucket90147676"
+          }
+        ],
+        "/TextractPipelineStack/InventoryAndLogsBucket/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "InventoryAndLogsBucketB5DF1E2C"
+          }
+        ],
+        "/TextractPipelineStack/OutputTable/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "OutputTable875D8E18"
+          }
+        ],
+        "/TextractPipelineStack/DocumentsTable/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "DocumentsTable7E808EE5"
+          }
+        ],
+        "/TextractPipelineStack/DLQ/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "DLQ581697C4"
+          }
+        ],
+        "/TextractPipelineStack/SyncJobs/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SyncJobs0FE0C444"
+          }
+        ],
+        "/TextractPipelineStack/AsyncJobs/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AsyncJobsE9347181"
+          }
+        ],
+        "/TextractPipelineStack/JobResults/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "JobResults39F5168E"
+          }
+        ],
+        "/TextractPipelineStack/JobResults/Policy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "JobResultsPolicy26D354DC"
+          }
+        ],
+        "/TextractPipelineStack/JobResults/TextractPipelineStackJobCompletion9BDE34E4/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "JobResultsTextractPipelineStackJobCompletion9BDE34E4A63AFCA3"
+          }
+        ],
+        "/TextractPipelineStack/HelperLayer/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HelperLayer49ADCD6B"
+          }
+        ],
+        "/TextractPipelineStack/Textractor/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TextractorAF6C0D19"
+          }
+        ],
+        "/TextractPipelineStack/S3Processor/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "S3ProcessorServiceRoleB05FBD69"
+          }
+        ],
+        "/TextractPipelineStack/S3Processor/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "S3ProcessorServiceRoleDefaultPolicyDB165203"
+          }
+        ],
+        "/TextractPipelineStack/S3Processor/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "S3ProcessorF0626C49"
+          }
+        ],
+        "/TextractPipelineStack/BucketNotificationsHandler050a0587b7544547bf325f094a3db834/Role/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleB6FB88EC"
+          }
+        ],
+        "/TextractPipelineStack/BucketNotificationsHandler050a0587b7544547bf325f094a3db834/Role/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleDefaultPolicy2CF63D36"
+          }
+        ],
+        "/TextractPipelineStack/BucketNotificationsHandler050a0587b7544547bf325f094a3db834/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BucketNotificationsHandler050a0587b7544547bf325f094a3db8347ECC3691"
+          }
+        ],
+        "/TextractPipelineStack/S3BatchProcessor/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "S3BatchProcessorServiceRoleD6C72F8A"
+          }
+        ],
+        "/TextractPipelineStack/S3BatchProcessor/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "S3BatchProcessorServiceRoleDefaultPolicyB97F9E74"
+          }
+        ],
+        "/TextractPipelineStack/S3BatchProcessor/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "S3BatchProcessor6C619AEA"
+          }
+        ],
+        "/TextractPipelineStack/TaskProcessor/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TaskProcessorServiceRoleB5CA2A12"
+          }
+        ],
+        "/TextractPipelineStack/TaskProcessor/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TaskProcessorServiceRoleDefaultPolicy877E187E"
+          }
+        ],
+        "/TextractPipelineStack/TaskProcessor/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TaskProcessor26BEA722"
+          }
+        ],
+        "/TextractPipelineStack/TaskProcessor/DynamoDBEventSource:TextractPipelineStackDocumentsTable2054137D/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TaskProcessorDynamoDBEventSourceTextractPipelineStackDocumentsTable2054137D3E69E9E2"
+          }
+        ],
+        "/TextractPipelineStack/SyncProcessor/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SyncProcessorServiceRoleA3A4164E"
+          }
+        ],
+        "/TextractPipelineStack/SyncProcessor/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SyncProcessorServiceRoleDefaultPolicy47FE5EFC"
+          }
+        ],
+        "/TextractPipelineStack/SyncProcessor/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SyncProcessorA0819FA5"
+          }
+        ],
+        "/TextractPipelineStack/SyncProcessor/SqsEventSource:TextractPipelineStackSyncJobsF8FC7C33/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SyncProcessorSqsEventSourceTextractPipelineStackSyncJobsF8FC7C337518D58C"
+          }
+        ],
+        "/TextractPipelineStack/ASyncProcessor/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ASyncProcessorServiceRoleB60BB53C"
+          }
+        ],
+        "/TextractPipelineStack/ASyncProcessor/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ASyncProcessorServiceRoleDefaultPolicyC603F804"
+          }
+        ],
+        "/TextractPipelineStack/ASyncProcessor/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ASyncProcessorD1027704"
+          }
+        ],
+        "/TextractPipelineStack/ASyncProcessor/AllowInvoke:TextractPipelineStackJobCompletion9BDE34E4": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ASyncProcessorAllowInvokeTextractPipelineStackJobCompletion9BDE34E4F2A37B66"
+          }
+        ],
+        "/TextractPipelineStack/ASyncProcessor/JobCompletion/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ASyncProcessorJobCompletionB5FCBFE3"
+          }
+        ],
+        "/TextractPipelineStack/Rule/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "Rule4C995B7F"
+          }
+        ],
+        "/TextractPipelineStack/Rule/AllowEventRuleTextractPipelineStackASyncProcessor380CECCF": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RuleAllowEventRuleTextractPipelineStackASyncProcessor380CECCF6E86A674"
+          }
+        ],
+        "/TextractPipelineStack/JobResultProcessor/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "JobResultProcessorServiceRole836B07ED"
+          }
+        ],
+        "/TextractPipelineStack/JobResultProcessor/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "JobResultProcessorServiceRoleDefaultPolicyD51ACD91"
+          }
+        ],
+        "/TextractPipelineStack/JobResultProcessor/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "JobResultProcessorAD5D1803"
+          }
+        ],
+        "/TextractPipelineStack/JobResultProcessor/SqsEventSource:TextractPipelineStackJobResults918E7248/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "JobResultProcessorSqsEventSourceTextractPipelineStackJobResults918E724899ECE5BE"
+          }
+        ],
+        "/TextractPipelineStack/PdfGenerator/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PdfGeneratorServiceRole8E7DE7E7"
+          }
+        ],
+        "/TextractPipelineStack/PdfGenerator/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PdfGeneratorServiceRoleDefaultPolicyDEDCFA7B"
+          }
+        ],
+        "/TextractPipelineStack/PdfGenerator/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PdfGeneratorF0286D75"
+          }
+        ],
+        "/TextractPipelineStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/TextractPipelineStack/CDKMetadata/Condition": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadataAvailable"
+          }
+        ],
+        "/TextractPipelineStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/TextractPipelineStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "TextractPipelineStack"
+    },
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    }
+  }
+}
