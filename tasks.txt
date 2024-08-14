@@ -1,6 +1,5 @@
-//Something went wrong after making changes to textract-pipeline-stack. Maybe event notification issue.
-put git
-setup dynamodb
+>setup dynamodb
+>add new code along with old code. separate db for data
 test
 
 launch command-
@@ -28,3 +27,6 @@ Batch write the items to the DynamoDB table.
 >2. S3 Event Configuration
 Configure an S3 event source for the Lambda function.
 Filter the events to only trigger when a new object is created in the specific folder (e.g., invoice-analysis).
+
+//Something went wrong after making changes to textract-pipeline-stack. Maybe event notification issue.
+//put git
