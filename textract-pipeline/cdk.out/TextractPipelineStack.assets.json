@@ -118,7 +118,20 @@
         }
       }
     },
-    "03d72f856370e0615ac040a2f7949c6d8eeac52f39d6eebceae3000bd15b247d": {
+    "c3a85e7123851d2999fb58b28acd515f8300035e62c7aea531b5857039a1ee95": {
+      "source": {
+        "path": "asset.c3a85e7123851d2999fb58b28acd515f8300035e62c7aea531b5857039a1ee95",
+        "packaging": "zip"
+      },
+      "destinations": {
+        "current_account-current_region": {
+          "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}",
+          "objectKey": "c3a85e7123851d2999fb58b28acd515f8300035e62c7aea531b5857039a1ee95.zip",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-${AWS::Region}"
+        }
+      }
+    },
+    "6eca951f13f6f89fb99a9dcffbbd4fad4909f6e44e63b326a7c03f31b7aeeab5": {
       "source": {
         "path": "TextractPipelineStack.template.json",
         "packaging": "file"
@@ -126,7 +139,7 @@
       "destinations": {
         "current_account-current_region": {
           "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}",
-          "objectKey": "03d72f856370e0615ac040a2f7949c6d8eeac52f39d6eebceae3000bd15b247d.json",
+          "objectKey": "6eca951f13f6f89fb99a9dcffbbd4fad4909f6e44e63b326a7c03f31b7aeeab5.json",
           "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-${AWS::Region}"
         }
       }

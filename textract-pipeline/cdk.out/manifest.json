@@ -18,7 +18,7 @@
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/03d72f856370e0615ac040a2f7949c6d8eeac52f39d6eebceae3000bd15b247d.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/6eca951f13f6f89fb99a9dcffbbd4fad4909f6e44e63b326a7c03f31b7aeeab5.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
@@ -80,6 +80,12 @@
           {
             "type": "aws:cdk:logicalId",
             "data": "DocumentsBucketAllowBucketNotificationsToTextractPipelineStackS3Processor64034F9FD5954400"
+          }
+        ],
+        "/TextractPipelineStack/DocumentsBucket/AllowBucketNotificationsToTextractPipelineStackDynamoDbProcessor75610DA8": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "DocumentsBucketAllowBucketNotificationsToTextractPipelineStackDynamoDbProcessor75610DA83672E740"
           }
         ],
         "/TextractPipelineStack/ExistingDocumentsBucket/Resource": [
@@ -338,6 +344,24 @@
           {
             "type": "aws:cdk:logicalId",
             "data": "PdfGeneratorF0286D75"
+          }
+        ],
+        "/TextractPipelineStack/DynamoDbProcessor/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "DynamoDbProcessorServiceRole5DC5981C"
+          }
+        ],
+        "/TextractPipelineStack/DynamoDbProcessor/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "DynamoDbProcessorServiceRoleDefaultPolicyC12B5C52"
+          }
+        ],
+        "/TextractPipelineStack/DynamoDbProcessor/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "DynamoDbProcessorC04F0E76"
           }
         ],
         "/TextractPipelineStack/CDKMetadata/Default": [

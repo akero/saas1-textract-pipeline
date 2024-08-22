@@ -10,6 +10,8 @@ import lambda = require('aws-cdk-lib/aws-lambda');
 import s3 = require('aws-cdk-lib/aws-s3');
 import {LambdaFunction} from "aws-cdk-lib/aws-events-targets";
 import { Construct } from 'constructs';
+import * as path from 'path';  // Add this line
+
 
 export class TextractPipelineStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -322,5 +324,39 @@ export class TextractPipelineStack extends cdk.Stack {
     existingContentBucket.grantReadWrite(pdfGenerator)
     pdfGenerator.grantInvoke(syncProcessor)
     pdfGenerator.grantInvoke(asyncProcessor)
+
+    // ... all below code for db
+    let saasTestTable: dynamodb.ITable;
+    try {
+      saasTestTable = dynamodb.Table.fromTableName(this, 'ExistingSaasTestTable', 'saastest1');
+    } catch {
+      saasTestTable = new dynamodb.Table(this, 'SaasTestTable', {
+        tableName: 'saastest1',
+        partitionKey: { name: 'userId', type: dynamodb.AttributeType.STRING },
+        sortKey: { name: 'billId', type: dynamodb.AttributeType.STRING },
+        billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
+      });
+    }
+
+const dynamoDbProcessor = new lambda.Function(this, 'DynamoDbProcessor', {
+  runtime: lambda.Runtime.PYTHON_3_9,
+  code: lambda.Code.fromAsset(path.join(__dirname, '..', 'lambda', 'dynamodbprocessor')),
+  handler: 'dynamodbprocessor.lambda_handler',
+  timeout: cdk.Duration.seconds(300),
+  environment: {
+    TABLE_NAME: 'saastest1',  // Or use a different name if desired
+  }
+});
+
+saasTestTable.grantWriteData(dynamoDbProcessor);
+
+// Grant permissions
+contentBucket.grantRead(dynamoDbProcessor);
+
+// Add S3 trigger for CSV files with "forms" in the name
+dynamoDbProcessor.addEventSource(new S3EventSource(contentBucket, {
+  events: [s3.EventType.OBJECT_CREATED],
+  filters: [{ suffix: '-forms.csv' }]
+}));
   }
 }
