@@ -414,6 +414,7 @@
       "AttributeType": "S"
      }
     ],
+    "BillingMode": "PAY_PER_REQUEST",
     "KeySchema": [
      {
       "AttributeName": "documentId",
@@ -423,11 +424,7 @@
       "AttributeName": "outputType",
       "KeyType": "RANGE"
      }
-    ],
-    "ProvisionedThroughput": {
-     "ReadCapacityUnits": 5,
-     "WriteCapacityUnits": 5
-    }
+    ]
    },
    "UpdateReplacePolicy": "Retain",
    "DeletionPolicy": "Retain",
@@ -444,16 +441,13 @@
       "AttributeType": "S"
      }
     ],
+    "BillingMode": "PAY_PER_REQUEST",
     "KeySchema": [
      {
       "AttributeName": "documentId",
       "KeyType": "HASH"
      }
     ],
-    "ProvisionedThroughput": {
-     "ReadCapacityUnits": 5,
-     "WriteCapacityUnits": 5
-    },
     "StreamSpecification": {
      "StreamViewType": "NEW_IMAGE"
     }

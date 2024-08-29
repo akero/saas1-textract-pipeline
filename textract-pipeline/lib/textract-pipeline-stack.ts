@@ -54,13 +54,17 @@ export class TextractPipelineStack extends cdk.Stack {
     //DynamoDB table with links to output in S3
     const outputTable = new dynamodb.Table(this, 'OutputTable', {
       partitionKey: { name: 'documentId', type: dynamodb.AttributeType.STRING },
-      sortKey: { name: 'outputType', type: dynamodb.AttributeType.STRING }
+      sortKey: { name: 'outputType', type: dynamodb.AttributeType.STRING },
+      billingMode: dynamodb.BillingMode.PAY_PER_REQUEST
+
     });
 
     //DynamoDB table with links to output in S3
     const documentsTable = new dynamodb.Table(this, 'DocumentsTable', {
       partitionKey: { name: 'documentId', type: dynamodb.AttributeType.STRING },
-      stream: dynamodb.StreamViewType.NEW_IMAGE
+      stream: dynamodb.StreamViewType.NEW_IMAGE,
+      billingMode: dynamodb.BillingMode.PAY_PER_REQUEST
+
     });
 
     //**********SQS Queues*****************************
@@ -325,6 +329,7 @@ export class TextractPipelineStack extends cdk.Stack {
     pdfGenerator.grantInvoke(syncProcessor)
     pdfGenerator.grantInvoke(asyncProcessor)
 
+    
     // ... all below code for db
     let saasTestTable: dynamodb.ITable;
     try {

@@ -1,5 +1,9 @@
->setup dynamodb
->add new code along with old code. separate db for data
+setup dynamodb
+//Ok cloudwatch log saying duplicate keys
+//test.py on desktop works, aws code does not. compare why
+>some scehma issue in cloudwatch
+
+two tables are created per document. Put relevant data from them into main db.
 test
 
 launch command-
@@ -13,6 +17,7 @@ The userId is used as the partition key to group bills for a specific user.
 The key and value from the CSV are stored as attributes within each item.
 Needs userId, and for sortkey needs billId#key (combination of billid and key)
 
+have to upload doc in bucket
 
 >connect csv to db- 
 
@@ -30,3 +35,6 @@ Filter the events to only trigger when a new object is created in the specific f
 
 //Something went wrong after making changes to textract-pipeline-stack. Maybe event notification issue.
 //put git
+//add new code along with old code. 
+//separate db for data. dynamodbprocessor is the db code and it needs to be added to textract-pipeline-stacks.ts. dont forget to add a "forms" based s3 event trigger
+/reuse dbs

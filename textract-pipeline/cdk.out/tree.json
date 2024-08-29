@@ -460,6 +460,7 @@
                         "attributeType": "S"
                       }
                     ],
+                    "billingMode": "PAY_PER_REQUEST",
                     "keySchema": [
                       {
                         "attributeName": "documentId",
@@ -469,11 +470,7 @@
                         "attributeName": "outputType",
                         "keyType": "RANGE"
                       }
-                    ],
-                    "provisionedThroughput": {
-                      "readCapacityUnits": 5,
-                      "writeCapacityUnits": 5
-                    }
+                    ]
                   }
                 },
                 "constructInfo": {
@@ -511,16 +508,13 @@
                         "attributeType": "S"
                       }
                     ],
+                    "billingMode": "PAY_PER_REQUEST",
                     "keySchema": [
                       {
                         "attributeName": "documentId",
                         "keyType": "HASH"
                       }
                     ],
-                    "provisionedThroughput": {
-                      "readCapacityUnits": 5,
-                      "writeCapacityUnits": 5
-                    },
                     "streamSpecification": {
                       "streamViewType": "NEW_IMAGE"
                     }
