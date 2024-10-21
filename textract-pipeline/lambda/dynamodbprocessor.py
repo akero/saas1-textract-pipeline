@@ -25,15 +25,36 @@ def lambda_handler(event, context):
     except ClientError as e:
         if e.response['Error']['Code'] == 'ResourceNotFoundException':
             logger.info(f"Table {table_name} does not exist. Creating...")
+
+            #Create table code does not work make sure table is created in the console first.
             table = dynamodb.create_table(
                 TableName=table_name,
                 AttributeDefinitions=[
-                    {'AttributeName': 'userId', 'AttributeType': 'S'},
-                    {'AttributeName': 'billId', 'AttributeType': 'S'}
+                   
+        {
+            'AttributeName': 'PrimaryKey',  # Replace with your primary key attribute name
+            'AttributeType': 'S'
+        },
+        {
+            'AttributeName': 'SortKey',  # Replace with your sort key attribute name (if applicable)
+            'AttributeType': 'N'
+        }
+    
+                   
+                   # {'AttributeName': 'userId', 'AttributeType': 'S'},
+                   # {'AttributeName': 'billId', 'AttributeType': 'S'}
                 ],
                 KeySchema=[
-                    {'AttributeName': 'userId', 'KeyType': 'HASH'},
-                    {'AttributeName': 'billId', 'KeyType': 'RANGE'}
+                     {
+            'AttributeName': 'PrimaryKey',
+            'KeyType': 'HASH'  # Partition key
+        },
+        {
+            'AttributeName': 'SortKey',  # Replace with your sort key attribute name (if applicable)
+            'KeyType': 'RANGE'  # Sort key
+        }
+                  # {'AttributeName': 'userId', 'KeyType': 'HASH'},
+                  # {'AttributeName': 'billId', 'KeyType': 'RANGE'}
                 ],
                 BillingMode='PAY_PER_REQUEST'
             )
@@ -71,10 +92,12 @@ def lambda_handler(event, context):
           key = row.get('Key')
           value = row.get('Value')
           if key and value:  # Only add non-empty key-value pairs
+              unique_suffix = str(uuid.uuid4())
+              unique_bill_Id= f"{bill_id}#{unique_suffix}"
               item = {
                   'userId': user_id,  # Replace with placeholder if needed
-                  'billId': bill_id,
-                  'key': str(uuid.uuid4()),  # Replace with actual key if needed
+                  'billId': unique_bill_Id,
+                  'key': str(key),  # Replace with actual key if needed
                   'value': str(value)
               }
 

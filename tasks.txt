@@ -33,6 +33,12 @@ Batch write the items to the DynamoDB table.
 Configure an S3 event source for the Lambda function.
 Filter the events to only trigger when a new object is created in the specific folder (e.g., invoice-analysis).
 
+//Heres how to retrieve bill data
+To retrieve all data for a specific bill (bill001), you can use a query operation with the following approach:
+
+Query by Partition Key (userId): Use the userId to identify the partition.
+Use a Sort Key Condition: Use a begins_with condition on the sort key to filter all items related to a specific billId.
+
 //Something went wrong after making changes to textract-pipeline-stack. Maybe event notification issue.
 //put git
 //add new code along with old code. 
